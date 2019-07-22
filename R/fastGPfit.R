@@ -3,6 +3,7 @@
 #'
 #' @param num  A integer number to specify the number of colors to generate. The default value is 256.
 #' @return A vector of RGB colors
+#' @author Jian Kang <jiankang@umich.edu>
 #' @examples
 #' colors = GP.create.cols(101L)
 #' require(graphics)
@@ -38,6 +39,8 @@ GP.create.cols = function(num=256L){
 #' @param grids_lim A vector of two real numbers for the range of the grids in each dimension. The default value is c(-1,1).
 #' @param random A logical value indicating whether each dimension of the grids is generated from a uniform distribution or fixed as equally-spaced.
 #' @return A matrix with d columns and num_grids^d rows.
+#' @author Jian Kang <jiankang@umich.edu>
+#'
 #' @examples
 #' x = GP.generate.grids(d=2L)
 #' require(lattice)
@@ -75,6 +78,8 @@ GP.generate.grids = function(d = 1L, num_grids = 50L, grids_lim = c(-1,1),random
 #' \eqn{cor(X(s_1),X(s_2)) = \exp{-a*(s_1^2+*s_2^2)-b*(s_1-s_2)^2}}
 #'
 #' where \eqn{a} is the concentration parameter and \eqn{b} is the smoothness parameter. The expected ranges of each coordinate is from -6 to 6.
+#'
+#'@author Jian Kang <jiankang@umich.edu>
 #'
 #' @examples
 #' library(BayesGPfit)
@@ -197,6 +202,9 @@ GP.std.grids = function(grids,center=apply(grids,2,mean),scale=NULL,max_range = 
 #' \eqn{cor(X(s_1),X(s_2)) = \exp{-a*(s_1^2+*s_2^2)-b*(s_1-s_2)^2}}
 #'
 #' where \eqn{a} is the concentration parameter and \eqn{b} is the smoothness parameter. The expected ranges of each coordinate is from -6 to 6.
+#'
+#'
+#' @author Jian Kang <jiankang@umich.edu>
 #' @examples
 #' grids = GP.generate.grids(d=2L)
 #' Psi_mat = GP.eigen.funcs.fast(grids)

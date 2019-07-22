@@ -28,3 +28,6 @@ require(lattice)
 y = sin(abs(x[,1]+x[,2]))
 levelplot(y~x[,1]+x[,2])
 }
+\author{
+Jian Kang <jiankang@umich.edu>
+}

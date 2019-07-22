@@ -23,3 +23,6 @@ require(graphics)
 filled.contour(volcano,col=colors,nlevels=length(colors)-1,asp=1)
 filled.contour(volcano,color.palette = GP.create.cols, nlevels=256, asp = 1)
 }
+\author{
+Jian Kang <jiankang@umich.edu>
+}

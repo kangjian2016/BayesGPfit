@@ -41,3 +41,6 @@ plot(fig[[2]],split=c(1,2,2,2),more=TRUE)
 plot(fig[[3]],split=c(2,1,2,2),more=TRUE)
 plot(fig[[4]],split=c(2,2,2,2))
 }
+\author{
+Jian Kang <jiankang@umich.edu>
+}

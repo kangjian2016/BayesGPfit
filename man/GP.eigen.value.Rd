@@ -35,3 +35,6 @@ Lambda = GP.eigen.value(poly_degree=10L,a=0.01,b=0.5,d=2)
 plot(Lambda)
 
 }
+\author{
+Jian Kang <jiankang@umich.edu>
+}
