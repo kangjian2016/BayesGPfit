@@ -29,6 +29,18 @@ GP.fast.Bayes.fit(y, x, poly_degree = 10L, a = 0.01, b = 1,
 
 \item{num_results}{An integer number to specify the number of posterior samples to save over MCMC iterations.}
 
+\item{iters_between_results}{An integer number to specify the number of iterations to skip between two saved iterations.}
+
+\item{burn_in}{An integer number to specify the burn-in number. The default value is 500L.}
+
+\item{a_sigma}{A real number for the shape parameter in the Gamma prior of sigma2. The default value is 0.01.}
+
+\item{b_sigma}{A real number for the rate parameter in the Gamma prior of sigma2. The default value is 0.01.}
+
+\item{a_tau}{A real number for the shape parameter in the Gamma prior of tau2. The default value is 0.01.}
+
+\item{b_tau}{A real number for the rate parameter in the Gamma prior of tau2. The default value is 0.01.}
+
 \item{progress_bar}{A logical value to indicate whether a progress bar will be shown.}
 }
 \value{

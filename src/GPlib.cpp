@@ -27,7 +27,7 @@
 # include <vector>
 # include <unordered_set>
 using namespace std;
-# include "hermite_polynomial.hpp"
+# include "hermite_polynomial.h"
 # include <R.h>
 # include <Rinternals.h>
 
@@ -111,7 +111,7 @@ int* GP_xsimplex(int d, int n, int* xsimplex_end){
 }
 
 
-template<class commonType>
+/*template<class commonType>
 void print_array(commonType* array, int nrow, int ncol,int start=0){
    for(int i=0;i<nrow;i++){
       for(int j=0;j<ncol-1;j++){
@@ -119,7 +119,7 @@ void print_array(commonType* array, int nrow, int ncol,int start=0){
       }
       std::cout << array[start+i+(ncol-1)*nrow] << std::endl;
    }
-}
+}*/
 
 template<class commonType>
 commonType* expand_grid(commonType* grid_x,int size_x,commonType* grid_y,int size_y,commonType* grid_z,int size_z, int& grids_size){

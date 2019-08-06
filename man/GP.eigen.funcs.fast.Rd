@@ -30,6 +30,7 @@ Compute eigen values of the standard modified exponential squared kernel on d-di
 where \eqn{a} is the concentration parameter and \eqn{b} is the smoothness parameter. The expected ranges of each coordinate is from -6 to 6.
 }
 \examples{
+library(lattice)
 grids = GP.generate.grids(d=2L)
 Psi_mat = GP.eigen.funcs.fast(grids)
 fig = list()

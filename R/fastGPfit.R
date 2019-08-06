@@ -206,6 +206,7 @@ GP.std.grids = function(grids,center=apply(grids,2,mean),scale=NULL,max_range = 
 #'
 #' @author Jian Kang <jiankang@umich.edu>
 #' @examples
+#' library(lattice)
 #' grids = GP.generate.grids(d=2L)
 #' Psi_mat = GP.eigen.funcs.fast(grids)
 #' fig = list()
@@ -216,7 +217,7 @@ GP.std.grids = function(grids,center=apply(grids,2,mean),scale=NULL,max_range = 
 #' plot(fig[[2]],split=c(1,2,2,2),more=TRUE)
 #' plot(fig[[3]],split=c(2,1,2,2),more=TRUE)
 #' plot(fig[[4]],split=c(2,2,2,2))
-#' @useDynLib BayesGPfit Wrapper_R_GP_eigen_funcs
+#' @useDynLib BayesGPfit,.registration = TRUE, Wrapper_R_GP_eigen_funcs
 #' @export
 GP.eigen.funcs.fast = function(grids,poly_degree=10L,a=0.01,b=1.0){
   num_funcs = GP.num.eigen.funs(poly_degree,ncol(grids))
@@ -244,6 +245,12 @@ GP.eigen.funcs.fast = function(grids,poly_degree=10L,a=0.01,b=1.0){
 #'@param scale A vector of positive numbers specifying the scale parameters in the modified exponential squared kernel. The default value is NULL and set to values such that grid points in a range of (-max_range,max_range) in each dimension.
 #'@param max_range A positive real number indicating the maximum range of the grid points to specify the scale parameter. The default value is NULL and set to 6.
 #'@param num_results An integer number to specify the number of posterior samples to save over MCMC iterations.
+#'@param iters_between_results An integer number to specify the number of iterations to skip between two saved iterations.
+#'@param burn_in An integer number to specify the burn-in number. The default value is 500L.
+#'@param a_sigma A real number for the shape parameter in the Gamma prior of sigma2. The default value is 0.01.
+#'@param b_sigma A real number for the rate parameter in the Gamma prior of sigma2. The default value is 0.01.
+#'@param a_tau  A real number for the shape parameter in the Gamma prior of tau2. The default value is 0.01.
+#'@param b_tau A real number for the rate parameter in the Gamma prior of tau2. The default value is 0.01.
 #'@param progress_bar A logical value to indicate whether a progress bar will be shown.
 #'
 #'@return A list of variables including the model fitting results
@@ -359,6 +366,12 @@ GP.fast.Bayes.fit = function(y,x,poly_degree = 10L,
 #'@param scale A vector of positive numbers specifying the scale parameters in the modified exponential squared kernel. The default value is NULL and set to values such that grid points in a range of (-max_range,max_range) in each dimension.
 #'@param max_range A positive real number indicating the maximum range of the grid points to specify the scale parameter. The default value is NULL and set to 6.
 #'@param num_results An integer number to specify the number of posterior samples to save over MCMC iterations.
+#'@param iters_between_results An integer number to specify the number of iterations to skip between two saved iterations.
+#'@param burn_in An integer number to specify the burn-in number. The default value is 500L.
+#'@param a_sigma A real number for the shape parameter in the Gamma prior of sigma2. The default value is 0.01.
+#'@param b_sigma A real number for the rate parameter in the Gamma prior of sigma2. The default value is 0.01.
+#'@param a_zeta  A real number for the shape parameter in the Gamma prior of zeta. The default value is 0.01.
+#'@param b_zeta A real number for the rate parameter in the Gamma prior of zeta. The default value is 0.01.
 #'@param progress_bar A logical value to indicate whether a progress bar will be shown.
 #'
 #'@return A list of variables including the model fitting results
@@ -490,7 +503,7 @@ GP.Bayes.fit = function(y,x,poly_degree=60,a = 0.01,b = 20,
 
 #'Summary of posterior inference on the Bayesian Gaussian process regression model
 #'
-#'@param GP_fit  An output object of function \link{GP.Bayes.fit} or \link{GP.fast.fit}. Please refer to them for details.
+#'@param GP_fit  An output object of function \link{GP.Bayes.fit} or \link{GP.fast.Bayes.fit}. Please refer to them for details.
 #'
 #'@author Jian Kang <jiankang@umich.edu>
 #'
@@ -562,7 +575,7 @@ GP.summary = function(GP_fit){
 }
 
 #'Gaussian process predictions
-#'@param GP_fit  An output object of function \link{GP.Bayes.fit} or \link{GP.fast.fit}. Please refer to them for details.
+#'@param GP_fit  An output object of function \link{GP.Bayes.fit} or \link{GP.fast.Bayes.fit}. Please refer to them for details.
 #'@param newx A matrix of real numbers as new grid points for preditions.
 #'@param CI A logical value indicating prediction.
 #'@author Jian Kang <jiankang@umich.edu>
@@ -701,9 +714,9 @@ GP.simulate.curve.fast = function(x,poly_degree,a,b,
 #'@param xlim A vector of two real numbers specifying the range of x-axis for 1D, 2D and 3D case. The default value is NULL and set to range(curve$x[,1]).
 #'@param ylim A vector of two real numbers specifying the range of y-axis only for 2D, 3D case. The default value is NULL and set to range(curve$x[,2]).
 #'@param zlim A vector of two real numbers specifying the range of z-axis only for 3D case. The default value is NULL and set to range(curve$x[,3]).
-#'@param col.region A vector of RGB colors for 2D and 3D plots. See \link{GP.create.cols}. The default value is NULL and set to GP.create.cols().
+#'@param col.regions A vector of RGB colors for 2D and 3D plots. See \link{GP.create.cols}. The default value is NULL and set to GP.create.cols().
 #'@param cut An integer specifying the number of colors in 2D and 3D plots. The default value is NULL and set to length(col.regions)-1.
-#'@param num_slice An integer specifying the number of slices cutting through the 3rd dimension to show.
+#'@param num_slices An integer specifying the number of slices cutting through the 3rd dimension to show.
 #'@param ... All other parameters for plot (1D case) and levelplot (2D and 3D cases).
 #'
 #'@return NULL for 1D case. An object of class "trellis" for 2D and 3D cases.
@@ -729,7 +742,7 @@ GP.simulate.curve.fast = function(x,poly_degree,a,b,
 #'curve3d = GP.simulate.curve.fast(x3d,a=0.01,b=0.5,
 #'                               poly_degree=10L)
 #'GP.plot.curve(curve3d,main="Simulated 3D Curve",num_slices=10,zlim=c(-0.5,0.5))
-#'
+#'@importFrom lattice levelplot
 #'@export
 GP.plot.curve = function(curve,xlab=NULL,ylab=NULL,
                          zlab=NULL,
@@ -829,13 +842,13 @@ GP.plot.curve = function(curve,xlab=NULL,ylab=NULL,
 #'@param leg_pos A character spaecifying the position of legend for multiple 1D curves. Possible valeus are "topleft", "topright","bottemright","bottemleft".
 #'@param xlim A vector of two real numbers specifying the range of x-axis for 1D, 2D and 3D case. The default value is NULL and set to range(curve$x[,1]).
 #'@param ylim A vector of two real numbers specifying the range of y-axis only for 2D, 3D case. The default value is NULL and set to range(curve$x[,2]).
-#'@param col.region A vector of RGB colors for 2D and 3D plots. See \link{GP.create.cols}. The default value is NULL and set to GP.create.cols().
+#'@param col.regions A vector of RGB colors for 2D and 3D plots. See \link{GP.create.cols}. The default value is NULL and set to GP.create.cols().
 #'@param cut An integer specifying the number of colors in 2D  plots. The default value is NULL and set to length(col.regions)-1.
 #'@param ... All other parameters for plot (1D case) and levelplot (2D case).
 #'
 #'@return NULL for 1D case. An object of class "trellis" for 2D and 3D cases.
 #'@author Jian Kang <jiankang@umich.edu>
-#'
+#'@importFrom lattice levelplot
 #'@examples
 #'library(BayesGPfit)
 #'library(lattice)
@@ -856,8 +869,7 @@ GP.plot.curve = function(curve,xlab=NULL,ylab=NULL,
 GP.plot.curves = function(curves,xlab=NULL,ylab=NULL,
                          cols = NULL, lwd=NULL, type=NULL, leg_pos=NULL,
                          xlim=NULL,ylim=NULL,
-                         col.regions=NULL,cut=NULL,
-                         num_slices=NULL,...){
+                         col.regions=NULL,cut=NULL,...){
 
   if(ncol(curves[[1]]$x)==1L){
 
