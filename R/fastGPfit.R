@@ -742,7 +742,7 @@ GP.simulate.curve.fast = function(x,poly_degree,a,b,
 #'curve3d = GP.simulate.curve.fast(x3d,a=0.01,b=0.5,
 #'                               poly_degree=10L)
 #'GP.plot.curve(curve3d,main="Simulated 3D Curve",num_slices=10,zlim=c(-0.5,0.5))
-#'@importFrom lattice levelplot
+#'@importFrom lattice levelplot strip.custom
 #'@export
 GP.plot.curve = function(curve,xlab=NULL,ylab=NULL,
                          zlab=NULL,
@@ -815,7 +815,7 @@ GP.plot.curve = function(curve,xlab=NULL,ylab=NULL,
     #od = order(x3[slice_idx],decreasing = FALSE)
     #slice_idx = slice_idx[od]
     #x3_print = paste(zlab,"=", round(x3[slice_idx],digits=2L))
-    x3 = round(x3[slice_idx],digit=2L)
+    x3 = round(x3[slice_idx],digits=2L)
 
     return(levelplot(curve$f[slice_idx]~curve$x[slice_idx,1] + curve$x[slice_idx,2] | x3,
               xlab=xlab,ylab=ylab,xlim=xlim,
@@ -849,6 +849,10 @@ GP.plot.curve = function(curve,xlab=NULL,ylab=NULL,
 #'@return NULL for 1D case. An object of class "trellis" for 2D and 3D cases.
 #'@author Jian Kang <jiankang@umich.edu>
 #'@importFrom lattice levelplot
+#'@importFrom grDevices rgb
+#'@importFrom graphics legend lines plot
+#'@importFrom stats quantile rgamma rnorm runif
+#'@importFrom utils setTxtProgressBar txtProgressBar
 #'@examples
 #'library(BayesGPfit)
 #'library(lattice)
