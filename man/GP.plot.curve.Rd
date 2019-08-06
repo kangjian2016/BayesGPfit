@@ -28,13 +28,13 @@ GP.plot.curve(curve, xlab = NULL, ylab = NULL, zlab = NULL,
 
 \item{zlim}{A vector of two real numbers specifying the range of z-axis only for 3D case. The default value is NULL and set to range(curve$x[,3]).}
 
+\item{col.regions}{A vector of RGB colors for 2D and 3D plots. See \link{GP.create.cols}. The default value is NULL and set to GP.create.cols().}
+
 \item{cut}{An integer specifying the number of colors in 2D and 3D plots. The default value is NULL and set to length(col.regions)-1.}
 
+\item{num_slices}{An integer specifying the number of slices cutting through the 3rd dimension to show.}
+
 \item{...}{All other parameters for plot (1D case) and levelplot (2D and 3D cases).}
-
-\item{col.region}{A vector of RGB colors for 2D and 3D plots. See \link{GP.create.cols}. The default value is NULL and set to GP.create.cols().}
-
-\item{num_slice}{An integer specifying the number of slices cutting through the 3rd dimension to show.}
 }
 \value{
 NULL for 1D case. An object of class "trellis" for 2D and 3D cases.
@@ -64,7 +64,6 @@ x3d = GP.generate.grids(d=3,num_grids = 50)
 curve3d = GP.simulate.curve.fast(x3d,a=0.01,b=0.5,
                               poly_degree=10L)
 GP.plot.curve(curve3d,main="Simulated 3D Curve",num_slices=10,zlim=c(-0.5,0.5))
-
 }
 \author{
 Jian Kang <jiankang@umich.edu>

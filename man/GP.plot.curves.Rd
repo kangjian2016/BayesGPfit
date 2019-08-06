@@ -7,8 +7,7 @@ curves}
 \usage{
 GP.plot.curves(curves, xlab = NULL, ylab = NULL, cols = NULL,
   lwd = NULL, type = NULL, leg_pos = NULL, xlim = NULL,
-  ylim = NULL, col.regions = NULL, cut = NULL, num_slices = NULL,
-  ...)
+  ylim = NULL, col.regions = NULL, cut = NULL, ...)
 }
 \arguments{
 \item{curves}{A list object of multiple curves and each curve is a list with two elements:
@@ -33,11 +32,11 @@ GP.plot.curves(curves, xlab = NULL, ylab = NULL, cols = NULL,
 
 \item{ylim}{A vector of two real numbers specifying the range of y-axis only for 2D, 3D case. The default value is NULL and set to range(curve$x[,2]).}
 
+\item{col.regions}{A vector of RGB colors for 2D and 3D plots. See \link{GP.create.cols}. The default value is NULL and set to GP.create.cols().}
+
 \item{cut}{An integer specifying the number of colors in 2D  plots. The default value is NULL and set to length(col.regions)-1.}
 
 \item{...}{All other parameters for plot (1D case) and levelplot (2D case).}
-
-\item{col.region}{A vector of RGB colors for 2D and 3D plots. See \link{GP.create.cols}. The default value is NULL and set to GP.create.cols().}
 }
 \value{
 NULL for 1D case. An object of class "trellis" for 2D and 3D cases.

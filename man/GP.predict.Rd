@@ -7,7 +7,7 @@
 GP.predict(GP_fit, newx, CI = TRUE)
 }
 \arguments{
-\item{GP_fit}{An output object of function \link{GP.Bayes.fit} or \link{GP.fast.fit}. Please refer to them for details.}
+\item{GP_fit}{An output object of function \link{GP.Bayes.fit} or \link{GP.fast.Bayes.fit}. Please refer to them for details.}
 
 \item{newx}{A matrix of real numbers as new grid points for preditions.}
 

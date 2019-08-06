@@ -23,6 +23,18 @@ GP.Bayes.fit(y, x, poly_degree = 60, a = 0.01, b = 20,
 
 \item{num_results}{An integer number to specify the number of posterior samples to save over MCMC iterations.}
 
+\item{iters_between_results}{An integer number to specify the number of iterations to skip between two saved iterations.}
+
+\item{burn_in}{An integer number to specify the burn-in number. The default value is 500L.}
+
+\item{a_sigma}{A real number for the shape parameter in the Gamma prior of sigma2. The default value is 0.01.}
+
+\item{b_sigma}{A real number for the rate parameter in the Gamma prior of sigma2. The default value is 0.01.}
+
+\item{a_zeta}{A real number for the shape parameter in the Gamma prior of zeta. The default value is 0.01.}
+
+\item{b_zeta}{A real number for the rate parameter in the Gamma prior of zeta. The default value is 0.01.}
+
 \item{center}{A vector of real numbers specifying the centroid parameters in the modified exponential squared kernel. The default value is NULL and set to the center of the grid points: apply(x,2,mean).}
 
 \item{scale}{A vector of positive numbers specifying the scale parameters in the modified exponential squared kernel. The default value is NULL and set to values such that grid points in a range of (-max_range,max_range) in each dimension.}
