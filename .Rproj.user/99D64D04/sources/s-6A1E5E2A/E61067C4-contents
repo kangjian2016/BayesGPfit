@@ -1,0 +1,40 @@
+datpath = "/Users/jiankang/Dropbox/Umich/People/JieHe/ImagingDataShare/PNC_ReHo"
+projpath = "/Users/jiankang/Dropbox/Umich/People/JieHe/ImagingDataShare/Rscript/"
+subj = dir(datpath)
+subj = sub(".nii.gz","",subj)
+subj = sub("ReHo_","",subj)
+subj = as.numeric(subj)
+library(oro.nifti)
+
+phenotype=readRDS(file=file.path(projpath,"PNCphenotype_reduced.rds"))
+AALmask = readNIfTI(fname=file.path(projpath,"AAL_90_3mm.nii"))
+table(AALmask)
+
+hist(phenotype$GAF003)
+idx = which(is.element(subj,phenotype$SUBJID))
+voxels = sum(AALmask>0)
+
+PNC_ReHo = matrix(NA,nrow=length(idx),ncol=voxels)
+datnames = dir(datpath)
+i = 1
+for(datname in datnames[idx]){
+  temp=readNIfTI(fname=file.path(datpath,datname))
+  PNC_ReHo[i,] = temp[AALmask>0]
+  i = i + 1
+  cat(i,datname,"\n")
+}
+saveRDS(PNC_ReHo,file=file.path(projpath,"PNC_ReHo.RDS"))
+
+ReHo=readRDS(file=file.path(projpath,"PNC_ReHo.RDS"))
+
+#The selected psychiatric outcome was the Children’s Global
+#Assessment Scale rating score (GAF003 in the PNC dataset),
+#which evaluated the current and lifetime history
+#of psychiatric disorder.
+
+Y = phenotype$GAF003
+X = PNC_ReHo
+X0 = scale(X)
+
+corvec = sapply(1:ncol(X), function(i) cor(Y,X[,i]))
+hist(corvec)

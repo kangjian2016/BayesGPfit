@@ -1,0 +1,116 @@
+#library(mcmc)
+rm(list=ls(all=TRUE))
+library(tensorflow)
+#install_tensorflow(method = "conda")
+
+#tf$enable_eager_execution()
+
+q = 10L
+p = 10L
+L = 100L
+n_R = 2000L
+n = n_R
+m = n_R
+sd_x0 = 0.1
+U_R = matrix(runif(n_R*p),nrow=n_R,ncol=p)
+X0_R = matrix(rnorm(n_R*q),nrow=n_R,ncol=q)
+#U = tf$placeholder(shape=shape(NULL,p),dtype=tf$float32)
+#X0 = tf$placeholder(shape=shape(NULL,q),dtype=tf$float32)
+U = tf$constant(U_R,dtype=tf$float32)
+X0 = tf$constant(X0_R,dtype=tf$float32)
+
+W = tf$Variable(tf$random_normal(shape(p,L)))
+b = tf$Variable(tf$random_normal(shape(L)))
+Z = tf$nn$relu(tf$matmul(U,W)+b)
+W0 = tf$Variable(tf$random_normal(shape(L,q)))
+b0 = tf$Variable(tf$random_normal(shape(q)))
+theta = tf$matmul(Z,W0) + b0
+log_sigma_X = tf$Variable(-2.0*tf$ones(shape=shape(q)))
+X=exp(log_sigma_X)*X0+theta
+
+#compute target density
+Sigma = tf$constant(shape=shape(q,q),
+                    value=matrix(0.9,nrow=q,ncol=q)+0.1*diag(q),
+                    dtype=tf$float32)
+logdetSigma = tf$linalg$logdet(Sigma)
+Xt = tf$transpose(X)
+invSigmaXt = tf$linalg$solve(Sigma,Xt)
+trace_XinvSigmaXt = tf$reduce_sum(Xt*invSigmaXt)/tf$to_float(n_R)
+logTargetDen = -0.5*(logdetSigma + trace_XinvSigmaXt)
+
+#compute working density
+#theta_rand = tf$random_shuffle(theta)
+theta_sub = theta
+
+X_tile = tf$tile(tf$reshape(X,shape=shape(n,q,1L)), multiples=c(1L,1L,m))
+log_sigma_X_tile = tf$tile(tf$reshape(log_sigma_X,shape=shape(1L,q,1L)), multiples=c(n,1L,m))
+theta_sub_tile = tf$reshape(tf$transpose(tf$tile(theta_sub,multiples = c(1L,n))),shape=shape(n,q,m))
+
+logWorkDen =  tf$reduce_mean(log(tf$reduce_mean(exp(-0.5*tf$reduce_sum(((X_tile - theta_sub_tile)/exp(log_sigma_X_tile))^2,
+                                                                       axis=1L)),
+                                                axis=1L)))
+
+KL_dist = -logTargetDen + logWorkDen
+optimizer = tf$train$AdamOptimizer()$minimize(KL_dist)
+
+sess = tf$Session()
+sess$run(tf$global_variables_initializer())
+
+num_run = 5000
+KL_dist_list = rep(NA,length=num_run)
+pb = txtProgressBar(style=3)
+
+par(mfcol=c(1,1))
+for(i in 1:num_run){
+  sess$run(optimizer)
+  KL_dist_list[i] = sess$run(KL_dist)
+  setTxtProgressBar(pb,i/num_run)
+  if(i%%10==0){
+    plot(KL_dist_list,type="l",xlim=c(1,num_run),col="red",lwd=2,ylim=c(-1,max(KL_dist_list,na.rm=TRUE)))
+    abline(h=0,lty=2)
+  }
+}
+close(pb)
+
+R_X=sess$run(X)
+print(cor(R_X[,1],R_X[,2]))
+par(mfcol=c(2,2))
+for(i in 1:2){
+  hist(R_X[,i],main=paste("X",i,sep=""))
+  qqnorm(R_X[,i])
+  abline(a=0,b=1)
+}
+
+R_theta = sess$run(theta)
+
+# a = tf$constant(seq(1,12),shape=shape(4L,3L))
+# b = tf$constant(seq(1,6),shape=shape(2L,3L))
+# a_tile = tf$tile(tf$reshape(a,shape=shape(4L,3L,1L)),multiples=c(1L,1L,2L))
+# b_tile = tf$reshape(tf$transpose(tf$tile(b,multiples=c(1L,4L))),shape=c(4L,3L,2L))
+#X_tile - theta_sub_tile
+
+
+#sess=tf$Session()
+
+# sess$run(theta, feed_dict =
+#            dict(U = matrix(runif(n*p),nrow=n,ncol=p)))
+
+
+
+# n = 10000
+# X_star = rnorm(n)
+#
+# X = rep(NA,length=n)
+# X[1] = -10
+# count = 0
+# for(i in 2:n){
+#   if(log(runif(1)) < (log_den(X_star[i]) - log_den(X[i-1]))){
+#     X[i] = X_star[i]
+#     count = count + 1
+#   }
+#   else{
+#     X[i] = X[i-1]
+#   }
+# }
+
+

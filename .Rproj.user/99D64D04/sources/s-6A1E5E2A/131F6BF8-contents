@@ -1,0 +1,16 @@
+library(dplyr)
+source("http://neuroconductor.org/neurocLite.R")
+neuro_install("neurohcp",relase="stable")
+library(neurohcp)
+set_aws_api_key(access_key = "AKIAXO65CT57NOFBHPEI", secret_key = "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")
+if (have_aws_key()) {
+  neurohcp::bucketlist()
+}
+
+ids_with_t1w = hcp_1200_scanning_info %>%
+  filter(scan_type %in% "T1w") %>%
+  select(id) %>%
+  unique
+head(ids_with_t1w)
+
+table(hcp_1200_scanning_info$scan_type)

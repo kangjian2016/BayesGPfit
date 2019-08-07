@@ -1,0 +1,4 @@
+CXX11 = g++
+CXX11STD = -std=c++11
+CXX_STD = CXX11
+
