@@ -4,11 +4,24 @@
 \alias{GP.fast.Bayes.fit}
 \title{Fast Bayesian fitting of Gaussian process}
 \usage{
-GP.fast.Bayes.fit(y, x, poly_degree = 10L, a = 0.01, b = 1,
-  center = NULL, scale = NULL, max_range = NULL,
-  num_results = 500L, iters_between_results = 2L, burn_in = 500L,
-  a_sigma = 0.01, b_sigma = 0.01, a_tau = 0.01, b_tau = 0.01,
-  progress_bar = FALSE)
+GP.fast.Bayes.fit(
+  y,
+  x,
+  poly_degree = 10L,
+  a = 0.01,
+  b = 1,
+  center = NULL,
+  scale = NULL,
+  max_range = NULL,
+  num_results = 500L,
+  iters_between_results = 2L,
+  burn_in = 500L,
+  a_sigma = 0.01,
+  b_sigma = 0.01,
+  a_tau = 0.01,
+  b_tau = 0.01,
+  progress_bar = FALSE
+)
 }
 \arguments{
 \item{y}{A vector of real numbers as the observations for the reponse variable.}

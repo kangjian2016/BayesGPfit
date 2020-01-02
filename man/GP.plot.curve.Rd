@@ -5,9 +5,19 @@
 \title{Graphical representation of one, two, three-dimensional
 curves}
 \usage{
-GP.plot.curve(curve, xlab = NULL, ylab = NULL, zlab = NULL,
-  xlim = NULL, ylim = NULL, zlim = NULL, col.regions = NULL,
-  cut = NULL, num_slices = NULL, ...)
+GP.plot.curve(
+  curve,
+  xlab = NULL,
+  ylab = NULL,
+  zlab = NULL,
+  xlim = NULL,
+  ylim = NULL,
+  zlim = NULL,
+  col.regions = NULL,
+  cut = NULL,
+  num_slices = NULL,
+  ...
+)
 }
 \arguments{
 \item{curve}{A list object with two elements:

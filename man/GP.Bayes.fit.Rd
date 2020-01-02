@@ -4,11 +4,24 @@
 \alias{GP.Bayes.fit}
 \title{Regular Bayesian fitting of Gaussian process regression on regular grid points with the modified exponential sqaured kernel.}
 \usage{
-GP.Bayes.fit(y, x, poly_degree = 60, a = 0.01, b = 20,
-  num_results = 500L, iters_between_results = 2L, burn_in = 500L,
-  a_sigma = 0.01, b_sigma = 0.01, a_zeta = 0.01, b_zeta = 0.01,
-  center = NULL, scale = NULL, max_range = NULL,
-  progress_bar = FALSE)
+GP.Bayes.fit(
+  y,
+  x,
+  poly_degree = 60,
+  a = 0.01,
+  b = 20,
+  num_results = 500L,
+  iters_between_results = 2L,
+  burn_in = 500L,
+  a_sigma = 0.01,
+  b_sigma = 0.01,
+  a_zeta = 0.01,
+  b_zeta = 0.01,
+  center = NULL,
+  scale = NULL,
+  max_range = NULL,
+  progress_bar = FALSE
+)
 }
 \arguments{
 \item{y}{A vector of real numbers as the observations for the reponse variable.}

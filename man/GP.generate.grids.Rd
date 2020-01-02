@@ -4,8 +4,12 @@
 \alias{GP.generate.grids}
 \title{Create spatial grids.}
 \usage{
-GP.generate.grids(d = 1L, num_grids = 50L, grids_lim = c(-1, 1),
-  random = FALSE)
+GP.generate.grids(
+  d = 1L,
+  num_grids = 50L,
+  grids_lim = c(-1, 1),
+  random = FALSE
+)
 }
 \arguments{
 \item{d}{An integer number for the dimension of the space. The default value is 1.}

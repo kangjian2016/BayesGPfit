@@ -4,8 +4,12 @@
 \alias{GP.std.grids}
 \title{Compute the standardized grids}
 \usage{
-GP.std.grids(grids, center = apply(grids, 2, mean), scale = NULL,
-  max_range = 6)
+GP.std.grids(
+  grids,
+  center = apply(grids, 2, mean),
+  scale = NULL,
+  max_range = 6
+)
 }
 \arguments{
 \item{grids}{A matrix where rows represent grid points and columns are coordinates.}

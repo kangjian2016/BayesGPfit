@@ -5,9 +5,20 @@
 \title{Graphical representation of multiple curves in one and two-dimensional
 curves}
 \usage{
-GP.plot.curves(curves, xlab = NULL, ylab = NULL, cols = NULL,
-  lwd = NULL, type = NULL, leg_pos = NULL, xlim = NULL,
-  ylim = NULL, col.regions = NULL, cut = NULL, ...)
+GP.plot.curves(
+  curves,
+  xlab = NULL,
+  ylab = NULL,
+  cols = NULL,
+  lwd = NULL,
+  type = NULL,
+  leg_pos = NULL,
+  xlim = NULL,
+  ylim = NULL,
+  col.regions = NULL,
+  cut = NULL,
+  ...
+)
 }
 \arguments{
 \item{curves}{A list object of multiple curves and each curve is a list with two elements:

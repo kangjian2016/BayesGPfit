@@ -43,9 +43,9 @@ Gaussian process predictions
 
 set.seed(1224)
 traindat = list()
-traindat$x = GP.generate.grids(d=2,num_grids=100,random=TRUE)
+traindat$x = GP.generate.grids(d=2,num_grids=30,random=TRUE)
 testdat = list()
-testdat$x = GP.generate.grids(d=2,num_grids=100,random=FALSE)
+testdat$x = GP.generate.grids(d=2,num_grids=30,random=FALSE)
 curve = GP.simulate.curve.fast(rbind(traindat$x,testdat$x),a=0.01,b=0.5,poly_degree=20L)
 train_curve = list(f=curve$f[1:nrow(traindat$x)],x=traindat$x)
 test_curve = list(f=curve$f[nrow(traindat$x)+1:nrow(testdat$x)],x=testdat$x)

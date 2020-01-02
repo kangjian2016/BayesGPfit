@@ -5,8 +5,15 @@
 \title{Simulate curve on d-dimensional Euclidean space based on Gaussian
 processes via modified exponential squared kernel.}
 \usage{
-GP.simulate.curve.fast(x, poly_degree, a, b, center = NULL,
-  scale = NULL, max_range = 6)
+GP.simulate.curve.fast(
+  x,
+  poly_degree,
+  a,
+  b,
+  center = NULL,
+  scale = NULL,
+  max_range = 6
+)
 }
 \arguments{
 \item{x}{A matrix of real numbers as grid points where rows are observations and columns are coordinates.}
