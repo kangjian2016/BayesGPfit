@@ -873,7 +873,7 @@ GP.plot.curve = function(curve,xlab=NULL,ylab=NULL,
 GP.plot.curves = function(curves,xlab=NULL,ylab=NULL,
                          cols = NULL, lwd=NULL, type=NULL, leg_pos=NULL,
                          xlim=NULL,ylim=NULL,
-                         col.regions=NULL,cut=NULL,...){
+                         col.regions=NULL,cut=NULL,nms=NULL,...){
 
   if(ncol(curves[[1]]$x)==1L){
 
@@ -901,10 +901,11 @@ GP.plot.curves = function(curves,xlab=NULL,ylab=NULL,
         lines(curves[[i]]$x[od],curves[[i]]$f[od],col=cols[i],lwd=lwd)
       }
     }
-
-    nms = names(curves)
     if(is.null(nms)){
-      nms = 1:length(curves)
+      nms = names(curves)
+      if(is.null(nms)){
+        nms = 1:length(curves)
+      }
     }
     legend(leg_pos,nms,col=cols,lwd=lwd,lty=1)
   }

@@ -17,6 +17,7 @@ GP.plot.curves(
   ylim = NULL,
   col.regions = NULL,
   cut = NULL,
+  nms = NULL,
   ...
 )
 }
