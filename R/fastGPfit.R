@@ -1,4 +1,4 @@
-#' Create 256 colors graduately transitioning from
+#' Create 256 colors gradually transitioning from
 #' Blue to Yellow to Red.
 #'
 #' @param num  A integer number to specify the number of colors to generate. The default value is 256.
@@ -9,6 +9,7 @@
 #' require(graphics)
 #' filled.contour(volcano,col=colors,nlevels=length(colors)-1,asp=1)
 #' filled.contour(volcano,color.palette = GP.create.cols, nlevels=256, asp = 1)
+#' @useDynLib BayesGPfit,.registration = TRUE
 #' @export
 GP.create.cols = function(num=256L){
   num = as.integer(num)
@@ -217,7 +218,7 @@ GP.std.grids = function(grids,center=apply(grids,2,mean),scale=NULL,max_range = 
 #' plot(fig[[2]],split=c(1,2,2,2),more=TRUE)
 #' plot(fig[[3]],split=c(2,1,2,2),more=TRUE)
 #' plot(fig[[4]],split=c(2,2,2,2))
-#' @useDynLib BayesGPfit,.registration = TRUE, Wrapper_R_GP_eigen_funcs
+# @useDynLib BayesGPfit,.registration = TRUE, Wrapper_R_GP_eigen_funcs
 #' @export
 GP.eigen.funcs.fast = function(grids,poly_degree=10L,a=0.01,b=1.0){
   num_funcs = GP.num.eigen.funs(poly_degree,ncol(grids))
@@ -264,7 +265,7 @@ GP.eigen.funcs.fast = function(grids,poly_degree=10L,a=0.01,b=1.0){
 #' plot(fig[[2]],split=c(1,2,2,2),more=TRUE)
 #' plot(fig[[3]],split=c(2,1,2,2),more=TRUE)
 #' plot(fig[[4]],split=c(2,2,2,2))
-#' @useDynLib BayesGPfit,.registration = TRUE, Wrapper_R_GP_eigen_funcs_orth
+# @useDynLib BayesGPfit,.registration = TRUE, Wrapper_R_GP_eigen_funcs_orth
 #' @export
 GP.eigen.funcs.fast.orth = function(grids,poly_degree=10L,a=0.01,b=1.0){
   num_funcs = GP.num.eigen.funs(poly_degree,ncol(grids))
@@ -886,11 +887,12 @@ GP.plot.curve = function(curve,xlab=NULL,ylab=NULL,
 #'@param cols A vector of integer numbers or characters to specify the plot colors for 1D curve. The default value is NULL and set to 1:length(curves).
 #'@param lwd A positive number to specify the width of lines for 1D curve.
 #'@param type A character specifying what type of plot should be drawn for 1D curve. Possible types are the same as \link{plot}.
-#'@param leg_pos A character spaecifying the position of legend for multiple 1D curves. Possible valeus are "topleft", "topright","bottemright","bottemleft".
+#'@param leg_pos A character specifying the position of legend for multiple 1D curves. Possible valeus are "topleft", "topright","bottemright","bottemleft".
 #'@param xlim A vector of two real numbers specifying the range of x-axis for 1D, 2D and 3D case. The default value is NULL and set to range(curve$x[,1]).
 #'@param ylim A vector of two real numbers specifying the range of y-axis only for 2D, 3D case. The default value is NULL and set to range(curve$x[,2]).
 #'@param col.regions A vector of RGB colors for 2D and 3D plots. See \link{GP.create.cols}. The default value is NULL and set to GP.create.cols().
 #'@param cut An integer specifying the number of colors in 2D  plots. The default value is NULL and set to length(col.regions)-1.
+#'@param nms A vector of charterers for figure titles. Default is Null in which case it is set to the names of the list object \code{curves}
 #'@param ... All other parameters for plot (1D case) and levelplot (2D case).
 #'
 #'@return NULL for 1D case. An object of class "trellis" for 2D and 3D cases.

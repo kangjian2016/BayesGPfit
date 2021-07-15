@@ -2,7 +2,7 @@
 % Please edit documentation in R/fastGPfit.R
 \name{GP.create.cols}
 \alias{GP.create.cols}
-\title{Create 256 colors graduately transitioning from
+\title{Create 256 colors gradually transitioning from
 Blue to Yellow to Red.}
 \usage{
 GP.create.cols(num = 256L)
@@ -14,7 +14,7 @@ GP.create.cols(num = 256L)
 A vector of RGB colors
 }
 \description{
-Create 256 colors graduately transitioning from
+Create 256 colors gradually transitioning from
 Blue to Yellow to Red.
 }
 \examples{

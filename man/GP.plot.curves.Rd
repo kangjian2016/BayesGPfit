@@ -38,7 +38,7 @@ GP.plot.curves(
 
 \item{type}{A character specifying what type of plot should be drawn for 1D curve. Possible types are the same as \link{plot}.}
 
-\item{leg_pos}{A character spaecifying the position of legend for multiple 1D curves. Possible valeus are "topleft", "topright","bottemright","bottemleft".}
+\item{leg_pos}{A character specifying the position of legend for multiple 1D curves. Possible valeus are "topleft", "topright","bottemright","bottemleft".}
 
 \item{xlim}{A vector of two real numbers specifying the range of x-axis for 1D, 2D and 3D case. The default value is NULL and set to range(curve$x[,1]).}
 
@@ -47,6 +47,8 @@ GP.plot.curves(
 \item{col.regions}{A vector of RGB colors for 2D and 3D plots. See \link{GP.create.cols}. The default value is NULL and set to GP.create.cols().}
 
 \item{cut}{An integer specifying the number of colors in 2D  plots. The default value is NULL and set to length(col.regions)-1.}
+
+\item{nms}{A vector of charterers for figure titles. Default is Null in which case it is set to the names of the list object \code{curves}}
 
 \item{...}{All other parameters for plot (1D case) and levelplot (2D case).}
 }
