@@ -234,6 +234,53 @@ GP.eigen.funcs.fast = function(grids,poly_degree=10L,a=0.01,b=1.0){
   return(matrix(res$eigen_funcs_R,nrow=res$grids_size_R,ncol=res$num_funcs_R))
 }
 
+#' Create orthogonal eigen functions based on the standard modified exponential squared correlation kernel and
+#' Gram-Schimit Process
+#' @title Create orthogonal eigen functions
+#' @param grids A matrix where rows represent points and columns are coordinates.
+#' @param poly_degree A integer number specifies the highest degree of Hermite polynomials. The default value is 10L.
+#' @param a A positive real number specifies the concentration parameter in the modified exponetial squared kernel. The larger value the more the GP concentrates around the center. The default value is 0.01.
+#' @param b A positive real number specifies the smoothness parameter in the modeified exponetial squared kernel. The smaller value the smoother the GP is. The default value is 1.0.
+#' @return A matrix represents a set of eigen functions evaluated at grid points.
+#' The number of rows is equal to the number of grid points. The number of columns is choose(poly_degree+d,d), where d is the dimnension of the grid points.
+#' @details
+#' Compute eigen values of the standard modified exponential squared kernel on d-dimensional grids
+#'
+#' \eqn{cor(X(s_1),X(s_2)) = \exp{-a*(s_1^2+*s_2^2)-b*(s_1-s_2)^2}}
+#'
+#' where \eqn{a} is the concentration parameter and \eqn{b} is the smoothness parameter. The expected ranges of each coordinate is from -6 to 6.
+#'
+#'
+#' @author Jian Kang <jiankang@umich.edu>
+#' @examples
+#' library(lattice)
+#' grids = GP.generate.grids(d=2L)
+#' Psi_mat = GP.eigen.funcs.fast.orth(grids)
+#' fig = list()
+#' for(i in 1:4){
+#'    fig[[i]] = levelplot(Psi_mat[,i]~grids[,1]+grids[,2])
+#' }
+#' plot(fig[[1]],split=c(1,1,2,2),more=TRUE)
+#' plot(fig[[2]],split=c(1,2,2,2),more=TRUE)
+#' plot(fig[[3]],split=c(2,1,2,2),more=TRUE)
+#' plot(fig[[4]],split=c(2,2,2,2))
+#' @useDynLib BayesGPfit,.registration = TRUE, Wrapper_R_GP_eigen_funcs_orth
+#' @export
+GP.eigen.funcs.fast.orth = function(grids,poly_degree=10L,a=0.01,b=1.0){
+  num_funcs = GP.num.eigen.funs(poly_degree,ncol(grids))
+  eigen_funcs = vector(mode="numeric",length=num_funcs*nrow(grids))
+  res = .C('Wrapper_R_GP_eigen_funcs_orth',
+           eigen_funcs_R = as.double(eigen_funcs),
+           num_funcs_R = as.integer(num_funcs),
+           grids_R = as.double(grids),
+           grids_size_R = as.integer(nrow(grids)),
+           dim_R = as.integer(ncol(grids)),
+           poly_degree_R = as.integer(poly_degree),
+           a_R = as.double(a),
+           b_R = as.double(b))
+  return(matrix(res$eigen_funcs_R,nrow=res$grids_size_R,ncol=res$num_funcs_R))
+}
+
 #'Fast Bayesian fitting of Gaussian process regression on regular grid points with the modified exponential sqaured kernel.
 #'@title Fast Bayesian fitting of Gaussian process
 #'@param y A vector of real numbers as the observations for the reponse variable.

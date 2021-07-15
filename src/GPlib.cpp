@@ -325,6 +325,117 @@ void R_GP_eigen_funcs_comp(double* eigen_funcs, double* uqgrid,int uqgrid_size,i
    delete[] sqrt2c_uqgrid;
 }
 
+
+double inner_prod(double* v, double* u, long n, long v_start = 0, long u_start = 0){
+   double y = 0.0;
+   for(int i=0; i<n; i++){
+      y += v[i+v_start]*u[i+u_start];
+   }
+   return y;
+}
+
+void proj_v_on_u(double* v, double* u, long n, long v_start = 0, long u_start = 0){
+   double uv = inner_prod(v,u,n,v_start,u_start);
+   double uu = inner_prod(u,u,n,u_start,u_start);
+   if(uu>0.0){
+      uv /= uu;
+      for(int i=0;i<n;i++){
+         v[v_start+i] = uv*u[u_start+i];
+      }
+   } else{
+      for(int i=0;i<n;i++){
+         v[v_start+i] = 0.0;
+      }
+   }
+}
+
+void proj_v_on_e(double* v, double* e, long n, long v_start = 0, long e_start = 0){
+   double ev = inner_prod(v,e,n,v_start,e_start);
+   for(int i=0;i<n;i++){
+      v[v_start+i] = ev*e[e_start+i];
+   }
+}
+
+void normalize_vec(double* u, long n, long u_start){
+   double uu = inner_prod(u,u,n,u_start,u_start);
+   if(uu>0.0){
+      double sqrt_uu = sqrt(uu);
+      for(int i=0;i<n;i++){
+         u[u_start+i] /= sqrt_uu;
+      }
+   }
+}
+
+
+void R_GP_eigen_funcs_orth_comp(double* eigen_funcs, double* uqgrid, int uqgrid_size,int* uqidx,int dim,int grids_size,
+                           int* xsimplex_list,int* xsimplex_list_end,int poly_degree,double cn){
+
+   double sqrt2c = sqrt(2.0*cn);
+   double D = pow(sqrt2c,0.5*dim);
+
+   double* exp_neg_c_uqgrid_sq = new double[uqgrid_size];
+   double* sqrt2c_uqgrid = new double[uqgrid_size];
+   double* temp_vec = new double[grids_size];
+   double* proj_vec = new double[grids_size];
+
+   for(int i=0;i<uqgrid_size;i++){
+      exp_neg_c_uqgrid_sq[i] = exp(-cn*uqgrid[i]*uqgrid[i]);
+      sqrt2c_uqgrid[i] = sqrt2c*uqgrid[i];
+   }
+
+   double* uqhermite =  hn_polynomial_value(uqgrid_size,poly_degree,sqrt2c_uqgrid);
+
+   int poly_degree_1 = poly_degree+1;
+   for(int k=0; k<poly_degree_1; k++){
+
+         int start, end;
+         if(k==0){
+            start = 0;
+         }
+         else{
+            start = xsimplex_list_end[k-1];
+         }
+         end = xsimplex_list_end[k]-1;
+         for(int j=start;j<=end; j++){
+
+            for(int i=0;i<grids_size;i++){
+               //eigen_funcs[eigen_loc] = D;
+               temp_vec[i] = D;
+               for(int l=0;l<dim;l++){
+                  int degree = xsimplex_list[dim*j+l];
+                  int x_loc = uqidx[grids_size*l+i];
+                  //eigen_funcs[eigen_loc] *= exp_neg_c_uqgrid_sq[x_loc]*uqhermite[degree*uqgrid_size+x_loc];
+                  temp_vec[i] *= exp_neg_c_uqgrid_sq[x_loc]*uqhermite[degree*uqgrid_size+x_loc];
+               }
+            }
+
+            for(int i=0; i<grids_size;i++){
+               long eigen_loc = i+grids_size*j;
+               eigen_funcs[eigen_loc] = temp_vec[i];
+            }
+            if(j>0){
+               for(int m=0;m<j;m++){
+                  for(int i=0;i<grids_size;i++){
+                     proj_vec[i] = temp_vec[i];
+                  }
+                  proj_v_on_u(proj_vec,eigen_funcs,grids_size,0,grids_size*m);
+                  for(int i=0; i<grids_size; i++){
+                     eigen_funcs[i+grids_size*j] -= proj_vec[i];
+                  }
+               }
+            }
+            //normalize_vec(eigen_funcs,grids_size,grids_size*j);
+
+         }
+   }
+
+   delete[] uqhermite;
+   delete[] exp_neg_c_uqgrid_sq;
+   delete[] sqrt2c_uqgrid;
+   delete[] temp_vec;
+   delete[] proj_vec;
+}
+
 void R_GP_eigen_funcs(double* eigen_funcs, double* grids, int grids_size,int dim, int poly_degree, double a, double b){
   double cn = sqrt(a*a+2*a*b);
   int uqgrid_size = 0;
@@ -341,6 +452,24 @@ void R_GP_eigen_funcs(double* eigen_funcs, double* grids, int grids_size,int dim
   delete[] xsimplex_list_end;
   delete[] xsimplex_list;
 }
+
+void R_GP_eigen_funcs_orth(double* eigen_funcs, double* grids, int grids_size,int dim, int poly_degree, double a, double b){
+   double cn = sqrt(a*a+2*a*b);
+   int uqgrid_size = 0;
+   double* uqgrid = unique<double>(grids,dim*grids_size,uqgrid_size);
+   int* uqidx = match<double>(grids,dim*grids_size,uqgrid,uqgrid_size);
+   int* xsimplex_list_end = new int [poly_degree+1];
+   int* xsimplex_list = GP_xsimplex(dim,poly_degree,xsimplex_list_end);
+
+   R_GP_eigen_funcs_orth_comp(eigen_funcs,uqgrid,uqgrid_size,uqidx,dim,grids_size,
+                         xsimplex_list, xsimplex_list_end,poly_degree,cn);
+
+   delete[] uqgrid;
+   delete[] uqidx;
+   delete[] xsimplex_list_end;
+   delete[] xsimplex_list;
+}
+
 
 double* GP_eigen_funcs(double* grids, int grids_size,int dim, int poly_degree, double a, double b, int& num_funcs){
   double cn = sqrt(a*a+2*a*b);
@@ -389,3 +518,8 @@ extern "C"{
    }
 }
 
+extern "C"{
+   void Wrapper_R_GP_eigen_funcs_orth(double* eigen_funcs_R, int*num_funcs_R, double* grids_R, int* grids_size_R, int* dim_R, int* poly_degree_R, double* a_R, double*  b_R){
+      R_GP_eigen_funcs_orth(eigen_funcs_R,grids_R, *grids_size_R, *dim_R, *poly_degree_R, *a_R, *b_R);
+   }
+}
