@@ -1,6 +1,6 @@
 Package: BayesGPfit
 Title: Fast Bayesian Gaussian Process Regression Fitting
-Version: 0.1.0
+Version: 1.1.0
 Authors@R: 
     c(person(given = "Jian",
            family = "Kang",
