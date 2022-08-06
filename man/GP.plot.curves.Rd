@@ -26,6 +26,11 @@ GP.plot.curves(
 \describe{
  \item{f}{A vector of real numbers for the curve.}
  \item{x}{A matrix of real numbers for the grid points where rows are observations and columns are coordinates.}
+}
+or a list object of two components
+\describe{
+ \item{f}{A matrix of real numbers for the multiple curves.}
+ \item{x}{A matrix of real numbers for the grid points where rows are observations and columns are coordinates.}
 }}
 
 \item{xlab}{A character specifying the label of x-axis for 1D, 2D and 3D case. The default value is NULL and set to "x" for 1D case and "x1" for 2D case.}
